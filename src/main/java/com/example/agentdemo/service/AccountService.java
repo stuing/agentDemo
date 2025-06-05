@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class AccountService {
@@ -15,7 +15,7 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     public Account registerAccount(Account account) {
-        if (account.getUsername() == null || account.getPassword() == null) {
+        if (!StringUtils.hasText(account.getUsername()) || !StringUtils.hasText(account.getPassword())) {
             throw new IllegalArgumentException("用户名和密码不能为空");
         }
 

@@ -2,6 +2,7 @@ package com.example.agentdemo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 @Data
@@ -17,6 +18,7 @@ public class Account {
     private String username;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "email", unique = true)

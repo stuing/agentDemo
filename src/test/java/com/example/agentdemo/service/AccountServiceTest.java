@@ -68,4 +68,22 @@ class AccountServiceTest {
         when(accountRepository.findByEmail("test@example.com")).thenReturn(Optional.of(new Account()));
         assertThrows(IllegalArgumentException.class, () -> accountService.registerAccount(account));
     }
+
+    @Test
+    void login_success() {
+        when(accountRepository.findByUsername("user1")).thenReturn(Optional.of(account));
+        when(passwordEncoder.matches("rawpass", "rawpass")).thenReturn(true);
+
+        Account result = accountService.login("user1", "rawpass");
+
+        assertEquals(account, result);
+    }
+
+    @Test
+    void login_wrong_password() {
+        when(accountRepository.findByUsername("user1")).thenReturn(Optional.of(account));
+        when(passwordEncoder.matches("wrong", "rawpass")).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> accountService.login("user1", "wrong"));
+    }
 }

@@ -39,4 +39,19 @@ public class AccountService {
         account.setCreatedAt(LocalDateTime.now());
         return accountRepository.save(account);
     }
+
+    public Account login(String username, String password) {
+        if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
+            throw new IllegalArgumentException("用户名和密码不能为空");
+        }
+
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("用户名或密码错误"));
+
+        if (!passwordEncoder.matches(password, account.getPassword())) {
+            throw new IllegalArgumentException("用户名或密码错误");
+        }
+
+        return account;
+    }
 }

@@ -4,6 +4,7 @@ import com.example.agentdemo.entity.Account;
 import com.example.agentdemo.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,9 @@ public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Account registerAccount(Account account) {
         if (!StringUtils.hasText(account.getUsername()) || !StringUtils.hasText(account.getPassword())) {
@@ -31,6 +35,7 @@ public class AccountService {
             throw new IllegalArgumentException("该手机号已被注册");
         }
 
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setCreatedAt(LocalDateTime.now());
         return accountRepository.save(account);
     }

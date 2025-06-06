@@ -1,6 +1,9 @@
 package com.example.agentdemo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,16 +17,20 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "用户名不能为空")
     @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
+    @NotBlank(message = "密码不能为空")
     @Column(name = "password", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Email(message = "邮箱格式不正确")
     @Column(name = "email", unique = true)
     private String email;
 
+    @Pattern(regexp = "^\\+?\\d{10,15}$", message = "手机号格式不正确")
     @Column(name = "phone", unique = true)
     private String phone;
 
